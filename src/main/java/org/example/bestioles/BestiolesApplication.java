@@ -91,7 +91,7 @@ public class BestiolesApplication implements CommandLineRunner {
 
         System.out.println("Test des requêtes PersonRepository");
         List<Person> personList = (List<Person>) personRepository.findAllByLastNameOrFirstName("Lamrque", "Bill");
-        System.out.println("Personnes trouvées avec le nom de famille 'Lamrque' ou le prénom 'Bill' : ");
+        System.out.println("Personnes trouvées avec le nom de famille 'Lamarque' ou le prénom 'Bill' : ");
         personList.forEach(System.out::println);
 
         personList = (List<Person>) personRepository.findAllByAgeGreaterThanEqual(30);
