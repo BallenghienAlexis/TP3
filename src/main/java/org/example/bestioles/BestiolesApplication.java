@@ -90,7 +90,7 @@ public class BestiolesApplication implements CommandLineRunner {
         speciesList.forEach(System.out::println);
 
         System.out.println("Test des requêtes PersonRepository");
-        List<Person> personList = (List<Person>) personRepository.findAllByLastNameOrFirstName("Lamrque", "Bill");
+        List<Person> personList = (List<Person>) personRepository.findAllByLastNameOrFirstName("Lamarque", "Bill");
         System.out.println("Personnes trouvées avec le nom de famille 'Lamarque' ou le prénom 'Bill' : ");
         personList.forEach(System.out::println);
 
