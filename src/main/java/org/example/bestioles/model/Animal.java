@@ -1,7 +1,13 @@
 package org.example.bestioles.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "animal", schema = "bestioles")
 public class Animal {
@@ -23,48 +29,25 @@ public class Animal {
     @JoinColumn(name = "species_id", nullable = false)
     private Species species;
 
-    public Integer getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(name = "person_animals", schema = "bestioles", joinColumns = @JoinColumn(name = "animals_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
+    private Set<Person> persons;
+
+    @Override
+    public String toString() {
+        return "Animal{" + "id=" + id + ", name='" + name + '\'' + ", color='" + color + '\'' + ", sex='" + sex + '\'' + '}';
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return id != null && id.equals(animal.id);
     }
 
-    public String getColor() {
-        return color;
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Species getSpecies() {
-        return species;
-    }
-
-    public void setSpecies(Species species) {
-        this.species = species;
-    }
-
-    public String getFullDescription() {
-        return name + " the " + species.getCommonName();
-    }
-
 }

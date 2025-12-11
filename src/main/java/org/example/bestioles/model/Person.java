@@ -1,8 +1,14 @@
 package org.example.bestioles.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "person", schema = "bestioles")
 public class Person {
@@ -15,10 +21,10 @@ public class Person {
     private Integer age;
 
     @Column(name = "firstname", nullable = false, length = 50)
-    private String firstname;
+    private String firstName;
 
     @Column(name = "lastname", nullable = false, length = 50)
-    private String lastname;
+    private String lastName;
 
     @Column(name = "login", nullable = false, length = 50)
     private String login;
@@ -30,64 +36,28 @@ public class Person {
     @Column(name = "active", nullable = false)
     private Byte active;
 
-    public Integer getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(name = "person_role", schema = "bestioles", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    @ManyToMany(mappedBy = "persons")
+    private Set<Animal> animals;
+
+    @Override
+    public String toString() {
+        return "Person{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", login='" + login + '\'' + '}';
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id != null && id.equals(person.id);
     }
 
-    public Integer getAge() {
-        return age;
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
-
-    public Byte getActive() {
-        return active;
-    }
-
-    public void setActive(Byte active) {
-        this.active = active;
-    }
-
-    public String getFullName() {
-        return firstname + " " + lastname;
-    }
-
 }

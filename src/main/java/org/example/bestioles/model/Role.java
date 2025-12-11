@@ -1,37 +1,42 @@
 package org.example.bestioles.model;
 
 import jakarta.persistence.*;
-import org.example.bestioles.repository.SpeciesRepository;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "role", schema = "bestioles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "label", nullable = false, length = 50)
     private String label;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToMany(mappedBy = "roles")
+    private Set<Person> persons;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
+    @Override
     public String toString() {
-        return this.label;
+        return "Role{" + "id=" + id + ", label='" + label + '\'' + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id != null && id.equals(role.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

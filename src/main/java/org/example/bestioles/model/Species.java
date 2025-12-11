@@ -1,7 +1,13 @@
 package org.example.bestioles.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "species", schema = "bestioles")
 public class Species {
@@ -16,32 +22,24 @@ public class Species {
     @Column(name = "latin_name", nullable = false, length = 200)
     private String latinName;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "species", fetch = FetchType.EAGER)
+    private List<Animal> animals;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCommonName() {
-        return commonName;
-    }
-
-    public void setCommonName(String commonName) {
-        this.commonName = commonName;
-    }
-
-    public String getLatinName() {
-        return latinName;
-    }
-
-    public void setLatinName(String latinName) {
-        this.latinName = latinName;
-    }
-
+    @Override
     public String toString() {
-        return this.commonName;
+        return "Species{" + "id=" + id + ", commonName='" + commonName + '\'' + ", latinName='" + latinName + '\'' + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Species species = (Species) o;
+        return id != null && id.equals(species.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
