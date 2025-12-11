@@ -38,7 +38,7 @@ public class BestiolesApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         System.out.println("----- BESTIOLES APPLICATION -----");
-        System.out.println("TP3");
+        System.out.println("TP3 - CRUD Operations");
         System.out.println("Listing all entities in the database:");
         List<Animal> animals = (List<Animal>) animalRepository.findAll();
         List<Person> persons = (List<Person>) personRepository.findAll();
@@ -57,7 +57,6 @@ public class BestiolesApplication implements CommandLineRunner {
         System.out.println("\nRôles : ");
         roles.forEach(System.out::println);
 
-        // --- Ajout d'un nouvel animal ---
         System.out.println("\nAjout d'un nouvel animal :");
         Animal animal = new Animal();
         animal.setName("Leo");
@@ -69,14 +68,12 @@ public class BestiolesApplication implements CommandLineRunner {
          Animal animal2 = animalRepository.findById(animal.getId()).orElse(null);
         System.out.println("\nNouvel animal ajouté : " + animal2);
 
-        // --- Suppression de l'animal ajouté ---
         System.out.println("\nSuppression du nouvel animal ajouté :");
         animalRepository.delete(animal);
         Animal animal3 = animalRepository.findById(animal.getId()).orElse(null);
         System.out.println("Animal supprimé, trouvé = " + (animal3 != null));
 
-        // --- TP4 ---
-        System.out.println("\nTP4");
+        System.out.println("\nTP4/TP5 - Test des requêtes personnalisées");
         System.out.println("\nTest des requêtes SpeciesRepository");
         Species species2 = speciesRepository.findByCommonName("Chat").orElse(null);
         System.out.println("Espèce trouvée par nom commun 'Chat' : " + species2);
@@ -133,5 +130,27 @@ public class BestiolesApplication implements CommandLineRunner {
         Animal animalCheck = animalRepository.findById(1).orElse(null);
         boolean appartenance = animalRepository.existsByAnimalBelongsToAnyPerson(animalCheck);
         System.out.println("L'animal avec l'ID 1 appartient-il à au moins une personne ? " + appartenance);
+
+        System.out.println("\nTP6 - Test des méthodes personnalisées du repository");
+        long countBeforeGen = personRepository.count();
+        System.out.println("Nombre de personnes avant génération : " + countBeforeGen);
+        personRepository.generatePersons(3);
+        long countAfterGen = personRepository.count();
+        System.out.println("Nombre de personnes après génération : " + countAfterGen);
+        if (countAfterGen >= countBeforeGen + 3) {
+            System.out.println("Génération de personnes : OK");
+        } else {
+            System.out.println("Génération de personnes : ECHEC");
+        }
+
+        long countBeforeDelete = personRepository.count();
+        personRepository.deletePersonsWithoutAnimals();
+        long countAfterDelete = personRepository.count();
+        System.out.println("Nombre de personnes après suppression des personnes sans animaux : " + countAfterDelete);
+        if (countAfterDelete < countBeforeDelete) {
+            System.out.println("Suppression des personnes sans animaux : OK");
+        } else {
+            System.out.println("Suppression des personnes sans animaux : ECHEC");
+        }
     }
 }
