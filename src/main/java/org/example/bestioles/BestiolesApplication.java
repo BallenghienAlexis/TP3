@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -152,5 +153,48 @@ public class BestiolesApplication implements CommandLineRunner {
         } else {
             System.out.println("Suppression des personnes sans animaux : ECHEC");
         }
+
+        System.out.println("TP6-BIS");
+        List<Person> personToAdd = new ArrayList<Person>();
+        Person p1 = new Person();
+        p1.setFirstName("Bill");
+        p1.setLastName("Bache");
+        p1.setLogin("bill.Bache");
+        p1.setMdp("password1");
+        p1.setAge(28);
+        p1.setActive((byte)1);
+        personToAdd.add(p1);
+
+        Person p2 = new Person();
+        p2.setFirstName("Boul");
+        p2.setLastName("Bache");
+        p2.setLogin("Boul.Bache");
+        p2.setMdp("password2");
+        p2.setAge(35);
+        p2.setActive((byte)1);
+        personToAdd.add(p2);
+
+        personRepository.saveAll(personToAdd);
+
+        List<Person> personList6 = (List<Person>) personRepository.findAllByLastNameOrFirstName("Bache", null);
+        System.out.println("Personnes trouvées avec le nom de famille 'Bache' : ");
+        personList6.forEach(System.out::println);
+        personRepository.deleteByLastName("Bache");
+        List<Person> personList7 = (List<Person>) personRepository.findAllByLastNameOrFirstName("Bache", null);
+        System.out.println("Personnes trouvées avec le nom de famille 'Bache' après suppression : ");
+        personList7.forEach(System.out::println);
+        // Si besoin de restaurer, on recrée les objets
+        List<Person> restoredPersons = new ArrayList<>();
+        for (Person p : personList6) {
+            Person newPerson = new Person();
+            newPerson.setFirstName(p.getFirstName());
+            newPerson.setLastName(p.getLastName());
+            newPerson.setLogin(p.getLogin());
+            newPerson.setMdp(p.getMdp());
+            newPerson.setAge(p.getAge());
+            newPerson.setActive(p.getActive());
+            restoredPersons.add(newPerson);
+        }
+        personRepository.saveAll(restoredPersons);
     }
 }
